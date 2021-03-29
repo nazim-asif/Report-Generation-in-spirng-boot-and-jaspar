@@ -5,7 +5,6 @@ import com.jasperreportusingjava.jasperrepot.Entity.Employee;
 import com.jasperreportusingjava.jasperrepot.repository.EmployeeRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
@@ -17,7 +16,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,7 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository repository;
 
-    public Map dataCustomisation() throws FileNotFoundException, JRException {
+    public String getCustomisedDataForReport(Map map) throws FileNotFoundException, JRException {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", "Nazim Uddin Asif");
         parameters.put("reportTitle", "Employee Info");
@@ -42,56 +40,59 @@ public class EmployeeService {
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(employees);
         parameters.put("tblData", dataSource);
 
-        return parameters;
+        return generateReport(map, parameters);
     }
 
-    public String generateReport(Map map) throws FileNotFoundException, JRException {
+    public String generateReport(Map map, Map parameters) throws FileNotFoundException, JRException {
         File file = ResourceUtils.getFile("classpath:"+map.get("jrxmlFilePath"));
         JasperReport Report = JasperCompileManager.compileReport(file.getAbsolutePath());
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(Report, dataCustomisation(), new JREmptyDataSource());
-        formattedFile((String) map.get("reportFormat"), jasperPrint, (String) map.get("path"));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(Report, parameters, new JREmptyDataSource());
+        getFormattedFile((String) map.get("reportFormat"), jasperPrint, (String) map.get("destinationPath"), (String) map.get("reportName"));
 
 
-        return "report generated in path : " + map.get("path");
+        return "report generated in path : " + map.get("destinationPath");
     }
 
-    public void formattedFile(String reportFormat, JasperPrint jasperPrint, String path) throws JRException, FileNotFoundException {
+    public void getFormattedFile(String reportFormat, JasperPrint jasperPrint, String path, String reportName) throws JRException, FileNotFoundException {
         if (reportFormat.equalsIgnoreCase("html")) {
-            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\employees_custom.html");
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\"+reportName+".html");
         }
-        if (reportFormat.equalsIgnoreCase("pdf")) {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\employees_custom.pdf");
+
+        else if (reportFormat.equalsIgnoreCase("pdf")) {
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\"+reportName+".pdf");
 
         }
-        if (reportFormat.equalsIgnoreCase("excel")) {
+
+        else if (reportFormat.equalsIgnoreCase("excel")) {
             JRXlsxExporter exporter = new JRXlsxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
                     new FileOutputStream(
-                            path + "\\employees_custom.xlsx"
+                            path + "\\"+reportName+".xlsx"
                     )
             ));
             exporter.exportReport();
         }
 
-        if (reportFormat.equalsIgnoreCase("docx")) {
+        else if (reportFormat.equalsIgnoreCase("docx")) {
 
             JRDocxExporter exporter = new JRDocxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput( new SimpleOutputStreamExporterOutput(
                     new FileOutputStream(
-                            path + "\\employees_custom.docx"
+                            path + "\\"+reportName+".docx"
                     )
             ));
             exporter.exportReport();
         }
-        if (reportFormat.equalsIgnoreCase("csv")) {
+
+        else if (reportFormat.equalsIgnoreCase("csv")) {
 
             JRCsvExporter exporter = new JRCsvExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput( new SimpleWriterExporterOutput(
-                            path + "\\employees_custom.csv"
+                            path + "\\"+reportName+".csv"
                     )
             );
             exporter.exportReport();

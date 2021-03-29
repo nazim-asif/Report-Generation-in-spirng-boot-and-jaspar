@@ -29,6 +29,6 @@ public class EmployeeController {
 
     @PostMapping("/report")
     public String generateReport(@RequestBody Map map) throws FileNotFoundException, JRException {
-        return service.generateReport(map);
+        return service.getCustomisedDataForReport(map);
     }
 }
