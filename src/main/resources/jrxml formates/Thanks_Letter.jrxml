@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="thanks_Letter" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4b0c5c0e-2ecf-4773-bc0b-738064566641">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<image>
+				<reportElement x="183" y="5" width="140" height="45" uuid="af1510af-a3aa-4d09-9136-85c7e196e8fd"/>
+				<imageExpression><![CDATA["C:/Users/BS591/OneDrive - BRAIN STATION 23 LTD/Desktop/bs/ekyc/picture/logo.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="223" y="58" width="100" height="31" uuid="8f3d27ca-65f5-4e60-881e-cb526d236e11">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[AB Bank Ltd. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="90" width="250" height="30" uuid="c15d9e5a-07ce-405f-8e1e-b2e5065eff9d"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[___________________ Branch]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="2" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="589" splitType="Stretch">
+			<staticText>
+				<reportElement x="29" y="15" width="180" height="30" uuid="139a1219-d5ff-4429-96b5-efcf89d6a05e"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Ref. No. 123456789 *]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="10" width="150" height="35" uuid="615a155d-f9e4-45ef-b63c-7776ad7426f3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Date: …………………]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="31" width="400" height="30" uuid="5e95e6eb-b7c6-40a0-9e5b-f01e52afa83c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[**(Name)____________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="59" width="400" height="30" uuid="2ab099f0-a3e8-48ad-b14d-7e2bbff90ebe"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[**(Contact Address)___________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="78" width="400" height="30" uuid="360efcc6-4ff3-4142-9fde-e78e2d4f2cf1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[_________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="111" width="485" height="30" uuid="dba2879a-fe9d-4472-a52a-d70fc23751d5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[**(Mobile Number)____________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="156" width="147" height="30" uuid="6ba80cfd-d5f9-4ebe-8125-1fa75aea7e04"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Dear Sir/Madam]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="187" width="475" height="30" uuid="26af2d99-a82d-44c1-a2ca-81c9aabab6b2"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Re: Opening of CD/SB A/c. No. …………………………………..…………with us.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="221" width="524" height="45" uuid="4a04f91d-99cf-4b4d-9d10-f1e1d4463a1c"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Thank you for choosing AB Bank. We value the trust and confidence you have placed in us and offer you a variety of financial services, privileges and benefits. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="267" width="530" height="190" uuid="c3bf6670-7c06-43b6-bba4-500b0320140d"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Hope you have already received your account number through SMS and deposited the minimum initial amount. Please follow below steps to activate your account-
+	Step-1:	Open AB Direct
+	Step-2:	Select “Activate Account”
+	Step-3:	Enter your account number
+	Step-4:	Get OTP in your mobile number through SMS
+	Step-5:	Enter OTP
+	Step-6:	Tap ‘Next’
+	Setp-7:	Enter Reference No. 123456789*
+	Step-8:	Submit
+
+Once again we thank you for your patronage and look forward to a mutually beneficial relationship.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="467" width="180" height="20" uuid="df29567c-d2f8-4d56-aba9-1f39f3af69f7"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Very truly yours,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="487" width="220" height="29" uuid="254f8c7f-7c47-4696-92e0-fb10061213e3"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[________________________
+Branch Relationship Manager
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="527" width="226" height="29" uuid="22e8a946-5245-4f6c-a029-e62881e2267f"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[•    Auto generated
+**  Auto populated
+]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
