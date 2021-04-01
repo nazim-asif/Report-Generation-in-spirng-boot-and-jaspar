@@ -3,9 +3,12 @@ package com.jasperreportusingjava.jasperrepot.service;
 
 import com.jasperreportusingjava.jasperrepot.Entity.Employee;
 import com.jasperreportusingjava.jasperrepot.repository.EmployeeRepository;
+import com.lowagie.text.pdf.PdfWriter;
+
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
@@ -13,13 +16,14 @@ import net.sf.jasperreports.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+import pojo.TableStructure;
+
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Nazim Uddin Asif
@@ -32,6 +36,7 @@ public class EmployeeService {
 
     /**
      * This method is customizing the data for jrxml file.
+     *
      * @param map it takes the value of jrxmlFilePath,
      *            reportFormat,reportName and destinationPath from user
      * @return It returns destination path of downloaded file
@@ -50,101 +55,111 @@ public class EmployeeService {
 //        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(employees);
 //        parameters.put("tblData", dataSource);
 
+
         return generateReport(map, parameters);
     }
 
     /**
      * Fill the report format and call a method for generating file
-     * @param map it takes values of jrxmlFilePath,
-     *            reportFormat,reportName and destinationPath from user
+     *
+     * @param map        it takes values of jrxmlFilePath,
+     *                   reportFormat,reportName and destinationPath from user
      * @param parameters it takes values for fill up jrxml template
      * @return destination path of downloaded file
      * @throws FileNotFoundException
      * @throws JRException
      */
     public String generateReport(Map map, Map parameters) throws FileNotFoundException, JRException {
-        File file = ResourceUtils.getFile("classpath:"+map.get("jrxmlFilePath"));
+        File file = ResourceUtils.getFile("classpath:" + map.get("jrxmlFilePath"));
         JasperReport Report = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(Report, parameters, new JREmptyDataSource());
-        getFormattedFile((String) map.get("reportFormat"), jasperPrint, (String) map.get("destinationPath"), (String) map.get("reportName"));
+//        JasperPrint jasperPrint = JasperFillManager.fillReport(Report, parameters, getDataSource());
+        getFormattedFile(map, jasperPrint);
 
 
         return "report generated in path : " + map.get("destinationPath");
     }
 
+
     /**
-     * Generate file
-     * @param reportFormat Name of format
-     * @param jasperPrint fill up template
-     * @param path destination path
-     * @param reportName report name
+     * Generate formatted file
+     * @param map it takes values of jrxmlFilePath,
+     *        reportFormat,reportName,password (it is not mandatory) and destinationPath from user
+     * @param jasperPrint filled up jasper template
      * @throws JRException
      * @throws FileNotFoundException
      */
 
-    public void getFormattedFile(String reportFormat, JasperPrint jasperPrint, String path, String reportName) throws JRException, FileNotFoundException {
-        if (reportFormat.equalsIgnoreCase("html")) {
-            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\"+reportName+".html");
-        }
+     public void getFormattedFile(Map<String, String> map, JasperPrint jasperPrint) throws JRException, FileNotFoundException {
+        if (map.get("reportFormat").equalsIgnoreCase("html")) {
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, map.get("destinationPath") + "\\" + map.get("reportName") + ".html");
+        } else if (map.get("reportFormat").equalsIgnoreCase("pdf")) {
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
+                    new FileOutputStream(
+                            map.get("destinationPath") + "\\" + map.get("reportName") + ".pdf"
+                    )
+            ));
 
-        else if (reportFormat.equalsIgnoreCase("pdf")) {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\"+reportName+".pdf");
+            if (map.containsKey("password")) {
+                SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
+                configuration.setEncrypted(true);
+                configuration.set128BitKey(true);
+                configuration.setUserPassword(map.get("password"));
+                configuration.setPermissions(PdfWriter.ALLOW_COPY | PdfWriter.ALLOW_PRINTING);
+                exporter.setConfiguration(configuration);
+            }
 
-        }
+            exporter.exportReport();
 
-        else if (reportFormat.equalsIgnoreCase("xlsx")) {
+        } else if (map.get("reportFormat").equalsIgnoreCase("xlsx")) {
             JRXlsxExporter exporter = new JRXlsxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
                     new FileOutputStream(
-                            path + "\\"+reportName+".xlsx"
+                            map.get("destinationPath") + "\\" + map.get("reportName") + ".xlsx"
                     )
             ));
+
+            if(map.containsKey("password"))
+            {
+                SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                configuration.setPassword(map.get("password"));
+                exporter.setConfiguration(configuration);
+            }
             exporter.exportReport();
-        }
-        else if (reportFormat.equalsIgnoreCase("xls")) {
-            SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
-            configuration.setOnePagePerSheet(true);
-            configuration.setDetectCellType(true);
-            configuration.setWhitePageBackground(false);
-            configuration.setFontSizeFixEnabled(false);
-            configuration.setRemoveEmptySpaceBetweenRows(true);
-            configuration.setRemoveEmptySpaceBetweenColumns(true);
-
-
-            JRXlsExporter exporter = new JRXlsExporter();
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setConfiguration(configuration);
-            exporter.setExporterOutput( new SimpleOutputStreamExporterOutput(
-                    new FileOutputStream(
-                            path + "\\"+reportName+".xls"
-                    )
-            ));
-            exporter.exportReport();
-        }
-
-        else if (reportFormat.equalsIgnoreCase("docx")) {
+        } else if (map.get("reportFormat").equalsIgnoreCase("docx")) {
 
             JRDocxExporter exporter = new JRDocxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput( new SimpleOutputStreamExporterOutput(
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
                     new FileOutputStream(
-                            path + "\\"+reportName+".docx"
+                            map.get("destinationPath") + "\\" + map.get("reportName") + ".docx"
                     )
             ));
-            exporter.exportReport();
-        }
+            if(map.containsKey("docx"))
+            {
+                SimpleDocxExporterConfiguration configuration = new SimpleDocxExporterConfiguration();
+                configuration.setMetadataAuthor(map.get("password"));
+                exporter.setConfiguration(configuration);
+            }
 
-        else if (reportFormat.equalsIgnoreCase("csv")) {
+            exporter.exportReport();
+        } else if (map.get("reportFormat").equalsIgnoreCase("csv")) {
 
             JRCsvExporter exporter = new JRCsvExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput( new SimpleWriterExporterOutput(
-                            path + "\\"+reportName+".csv"
+            exporter.setExporterOutput(new SimpleWriterExporterOutput(
+                    map.get("destinationPath") + "\\" + map.get("reportName") + ".csv"
                     )
             );
+
             exporter.exportReport();
         }
     }
+
+
+
 }
