@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/report")
-    public String generateReport(@RequestBody Map map) throws FileNotFoundException, JRException {
+    public String generateReport(@RequestBody Map map) throws IOException, JRException, GeneralSecurityException {
         return service.getCustomisedDataForReport(map);
     }
 }
