@@ -66,44 +66,44 @@ public class EmployeeService {
 //        List<Employee> employees = repository.findAll();
 //        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(employees);
 //        parameters.put("tblData", dataSource);
-//        generateReport(map, parameters);
+        generateReport(map, parameters);
 
-        ArrayList<ArrayList<String>> headers = new ArrayList<>();
-        ArrayList<ArrayList<String>> allData = new ArrayList<>();
-        ArrayList<String> sheets = new ArrayList<>();
-        ArrayList<String> header1 = new ArrayList<>();
-        header1.add("Header1");
-        header1.add("Header2");
-        header1.add("Header3");
-        headers.add(header1);
-
-//        ArrayList<String> header2 = new ArrayList<>();
-//        header2.add("Header1");
-//        header2.add("Header2");
-//        header2.add("Header3");
-//        headers.add(header2);
-
-
-        ArrayList<String> data1 = new ArrayList<>();
-        data1.add("value1");
-        data1.add("value2");
-        data1.add("value3");
-        data1.add("value4");
-        allData.add(data1);
-
-//        ArrayList<String> data2 = new ArrayList<>();
-//        data2.add("value1");
-//        data2.add("value2");
-//        data2.add("value3");
-//        data2.add("value4");
-//        data2.add("value5");
-//        allData.add(data2);
-
-        sheets.add("sheet1");
-//        sheets.add("sheet2");
-
-
-        createCustomisedExcel(sheets, headers, allData, "D:\\report\\newExcel");
+//        ArrayList<ArrayList<String>> headers = new ArrayList<>();
+//        ArrayList<ArrayList<String>> allData = new ArrayList<>();
+//        ArrayList<String> sheets = new ArrayList<>();
+//        ArrayList<String> header1 = new ArrayList<>();
+//        header1.add("Header1");
+//        header1.add("Header2");
+//        header1.add("Header3");
+//        headers.add(header1);
+//
+////        ArrayList<String> header2 = new ArrayList<>();
+////        header2.add("Header1");
+////        header2.add("Header2");
+////        header2.add("Header3");
+////        headers.add(header2);
+//
+//
+//        ArrayList<String> data1 = new ArrayList<>();
+//        data1.add("value1");
+//        data1.add("value2");
+//        data1.add("value3");
+//        data1.add("value4");
+//        allData.add(data1);
+//
+////        ArrayList<String> data2 = new ArrayList<>();
+////        data2.add("value1");
+////        data2.add("value2");
+////        data2.add("value3");
+////        data2.add("value4");
+////        data2.add("value5");
+////        allData.add(data2);
+//
+//        sheets.add("sheet1");
+////        sheets.add("sheet2");
+//
+//
+//        createCustomisedExcel(sheets, headers, allData, "D:\\report\\newExcel");
 
         return "ok";
     }
@@ -179,25 +179,6 @@ public class EmployeeService {
             }
             exporter.exportReport();
 
-//            POIFSFileSystem fs=new POIFSFileSystem();
-//            EncryptionInfo info=new EncryptionInfo(EncryptionMode.agile);
-//            File file = new File(map.get("destinationPath") + "\\" + map.get("reportName") + ".xlsx");
-//            Encryptor enc=info.getEncryptor();
-//            enc.confirmPassword("user");
-//
-//            try {
-//                OPCPackage opc = OPCPackage.open(file, PackageAccess.READ_WRITE);
-//                OutputStream os = enc.getDataStream(fs);
-//                opc.save(os);
-//                opc.close();
-//            } catch (InvalidFormatException e) {
-//                e.printStackTrace();
-//            }
-//            FileOutputStream fos = new FileOutputStream(map.get("destinationPath") + "\\" + map.get("reportName") + ".xlsx");
-//            fs.writeFilesystem(fos);
-//            fos.close();
-//            System.out.println("Document successfully encrypted");
-
 
         } else if (map.get("reportFormat").equalsIgnoreCase("docx")) {
 
@@ -208,33 +189,13 @@ public class EmployeeService {
                             map.get("destinationPath") + "\\" + map.get("reportName") + ".docx"
                     )
             ));
-            if (map.containsKey("docx")) {
+            if (map.containsKey("password")) {
                 SimpleDocxExporterConfiguration configuration = new SimpleDocxExporterConfiguration();
                 configuration.setMetadataAuthor(map.get("password"));
                 exporter.setConfiguration(configuration);
 
             }
             exporter.exportReport();
-
-//            POIFSFileSystem fs=new POIFSFileSystem();
-//            EncryptionInfo info=new EncryptionInfo(EncryptionMode.standard);
-//            File file=new File(map.get("destinationPath") + "\\" + map.get("reportName") + ".docx");
-//            Encryptor enc=info.getEncryptor();
-//            enc.confirmPassword("user");
-//
-//            try {
-//                OPCPackage opc = OPCPackage.open(file, PackageAccess.READ_WRITE);
-//                OutputStream os = enc.getDataStream(fs);
-//                opc.save(os);
-//                opc.close();
-//            } catch (InvalidFormatException e) {
-//                e.printStackTrace();
-//            }
-//            FileOutputStream fos = new FileOutputStream(map.get("destinationPath") + "\\" + map.get("reportName") + ".docx");
-//            fs.writeFilesystem(fos);
-//            fos.close();
-//            System.out.println("Document successfully encrypted");
-
 
         } else if (map.get("reportFormat").equalsIgnoreCase("csv")) {
 
@@ -254,16 +215,16 @@ public class EmployeeService {
      * @param sheets name of sheets
      * @param headers list of headers for every sheet
      * @param allData list of data for every sheet
-     * @param pathAndName destination path and file name
+     * @param pathAndFileName destination path and file name
      */
-    public void createCustomisedExcel(List<String> sheets, ArrayList<ArrayList<String>> headers, ArrayList<ArrayList<String>> allData, String pathAndName) {
+    public void createCustomisedExcel(List<String> sheets, ArrayList<ArrayList<String>> headers, ArrayList<ArrayList<String>> allData, String pathAndFileName) {
         Workbook workbook = new XSSFWorkbook();
         for (int item = 0; item < sheets.size(); item++) {
             Sheet sheet = workbook.createSheet(sheets.get(item));
             loadDataInExcelFile(sheet, headers.get(item), allData.get(item));
         }
         try {
-            workbook.write(new FileOutputStream(pathAndName+".xlsx"));
+            workbook.write(new FileOutputStream(pathAndFileName+".xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
