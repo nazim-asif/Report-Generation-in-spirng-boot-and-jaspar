@@ -4,6 +4,7 @@ package com.jasperreportusingjava.jasperrepot.service;
 import com.jasperreportusingjava.jasperrepot.Entity.Employee;
 import com.jasperreportusingjava.jasperrepot.repository.EmployeeRepository;
 
+import com.jasperreportusingjava.jasperrepot.wrapper.ReportWrapper;
 import com.lowagie.text.pdf.PdfWriter;
 
 import net.sf.jasperreports.engine.*;
@@ -46,6 +47,18 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository repository;
 
+    public String getCustomisedDataForReportWithWrapper(Map<String, String> map) throws IOException, JRException, GeneralSecurityException {
+
+        ReportWrapper reportWrapper = new ReportWrapper();
+        reportWrapper.setJrxmlFilePath(map.get("jrxmlFilePath"));
+        reportWrapper.setReportName(map.get("reportName"));
+        reportWrapper.setDestinationPath(map.get("destinationPath"));
+
+
+
+        return "Ok";
+    }
+
     /**
      * This method is customizing the data for jrxml file.
      *
@@ -66,44 +79,45 @@ public class EmployeeService {
 //        List<Employee> employees = repository.findAll();
 //        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(employees);
 //        parameters.put("tblData", dataSource);
-        generateReport(map, parameters);
+//        generateReport(map, parameters);
 
-//        ArrayList<ArrayList<String>> headers = new ArrayList<>();
-//        ArrayList<ArrayList<String>> allData = new ArrayList<>();
-//        ArrayList<String> sheets = new ArrayList<>();
-//        ArrayList<String> header1 = new ArrayList<>();
-//        header1.add("Header1");
-//        header1.add("Header2");
-//        header1.add("Header3");
-//        headers.add(header1);
+        ArrayList<ArrayList<String>> headers = new ArrayList<>();
+        ArrayList<ArrayList<String>> allData = new ArrayList<>();
+        ArrayList<String> sheets = new ArrayList<>();
+
+        ArrayList<String> header1 = new ArrayList<>();
+        header1.add("Header1");
+        header1.add("Header2");
+        header1.add("Header3");
+        headers.add(header1);
+
+        ArrayList<String> header2 = new ArrayList<>();
+        header2.add("Header1");
+        header2.add("Header2");
+        header2.add("Header3");
+        headers.add(header2);
+
+
+        ArrayList<String> data1 = new ArrayList<>();
+        data1.add("value1");
+        data1.add("value2");
+        data1.add("value3");
+        data1.add("value4");
+        allData.add(data1);
+
+        ArrayList<String> data2 = new ArrayList<>();
+        data2.add("value1");
+        data2.add("value2");
+        data2.add("value3");
+        data2.add("value4");
+        data2.add("value5");
+        allData.add(data2);
+
+        sheets.add("sheet1");
+        sheets.add("sheet2");
+
 //
-////        ArrayList<String> header2 = new ArrayList<>();
-////        header2.add("Header1");
-////        header2.add("Header2");
-////        header2.add("Header3");
-////        headers.add(header2);
-//
-//
-//        ArrayList<String> data1 = new ArrayList<>();
-//        data1.add("value1");
-//        data1.add("value2");
-//        data1.add("value3");
-//        data1.add("value4");
-//        allData.add(data1);
-//
-////        ArrayList<String> data2 = new ArrayList<>();
-////        data2.add("value1");
-////        data2.add("value2");
-////        data2.add("value3");
-////        data2.add("value4");
-////        data2.add("value5");
-////        allData.add(data2);
-//
-//        sheets.add("sheet1");
-////        sheets.add("sheet2");
-//
-//
-//        createCustomisedExcel(sheets, headers, allData, "D:\\report\\newExcel");
+        createCustomisedExcel(sheets, headers, allData, "D:\\report\\newExcel1");
 
         return "ok";
     }
@@ -124,7 +138,6 @@ public class EmployeeService {
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(Report, parameters, new JREmptyDataSource());
         getFormattedFile(map, jasperPrint);
-
 
         return "report generated in path : " + map.get("destinationPath");
     }
@@ -205,10 +218,16 @@ public class EmployeeService {
                             map.get("destinationPath") + "\\" + map.get("reportName") + ".csv"
                     )
             );
+           // getConfiguration(JRCsvExporter);
 
             exporter.exportReport();
         }
     }
+//    public <T> T getConfiguration(T exporter){
+//        exporter
+//        return exporter;
+//    }
+//    Objects
 
     /**
      * generate customised excel file with n number of sheet
@@ -253,12 +272,30 @@ public class EmployeeService {
                     dataRow.createCell(j).setCellValue(data.get(k));
                 else
                     dataRow.createCell(j).setCellValue("");
-
                 k++;
             }
         }
+//        Map<List<Integer>,List<Integer>> map = new HashMap<>();
+//
+//        List<Integer> key = new ArrayList<>();
+//        key.add(1);
+//        key.add(2);
+//
+//        List<Integer> value = new ArrayList<>();
+//        key.add(1);
+//        key.add(2);
+//
+//        map.put(key, value);
+//
+//        Map.Entry<List<Integer>,List<Integer>> pair = (Map.Entry<List<Integer>, List<Integer>>) map.entrySet();
+//
+//        Set<List<Integer>> key1 = map.keySet();
+//
+//        System.out.println(key1);
+
+
+
 
     }
-
 
 }
